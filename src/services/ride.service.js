@@ -94,6 +94,22 @@ class RideService {
     // Broadcast the real-time ride request to all connected drivers
     notifyDrivers('new_ride_request', populatedRide);
 
+    // If there is any online approved driver (like Neeraj Kumar Yadav), auto-assign after 3.5 seconds for testing
+    if (onlineDrivers.length > 0) {
+      const targetDriverId = onlineDrivers[0].userId;
+      setTimeout(async () => {
+        try {
+          const currentRide = await Ride.findByPk(ride.id);
+          if (currentRide && currentRide.status === 'pending') {
+            logger.info(`🤖 Development Auto-Assign: Matching ride ${ride.id} to online driver ${targetDriverId}`);
+            await this.acceptRide(targetDriverId, ride.id);
+          }
+        } catch (autoErr) {
+          logger.error('Error in auto-assignment:', autoErr);
+        }
+      }, 3500);
+    }
+
     return populatedRide;
   }
 
