@@ -74,7 +74,7 @@ const connectDB = async () => {
     }
   } catch (error) {
     logger.error(`❌  Database connection failed: ${error.message}`);
-    process.exit(1);
+    logger.warn('⚠️ Server will continue running to allow Railway health checks, but database queries will fail until MySQL is fully online.');
   }
 };
 

@@ -185,12 +185,20 @@ class RideService {
       throw AppError.badRequest('Invalid OTP. Please check with the rider and try again.');
     }
 
-    await ride.update({ otpVerifiedAt: new Date() });
+    await ride.update({ 
+      otpVerifiedAt: new Date(),
+      status: 'in_progress',
+      startedAt: new Date()
+    });
 
-    // Notify rider that OTP was verified
+    const populatedRide = await this.getRideById(ride.id);
+
+    // Notify both rider and driver that ride has started
     notifyUser(ride.riderId, 'otp_verified', { rideId: ride.id });
+    notifyUser(ride.riderId, 'ride_started', populatedRide);
+    notifyUser(driverId, 'ride_started', populatedRide);
 
-    return this.getRideById(ride.id);
+    return populatedRide;
   }
 
   /**
@@ -317,7 +325,14 @@ class RideService {
       ], { transaction: t });
 
       await t.commit();
-      return this.getRideById(ride.id);
+      
+      const populatedRide = await this.getRideById(ride.id);
+      
+      // Emit real-time completion sockets
+      notifyUser(ride.riderId, 'ride_completed', populatedRide);
+      notifyUser(driverId, 'ride_completed', populatedRide);
+
+      return populatedRide;
     } catch (error) {
       await t.rollback();
       throw error;
