@@ -9,9 +9,16 @@ const dbUrl = process.env.MYSQL_URL || process.env.DATABASE_URL;
 let sequelize;
 
 if (dbUrl) {
-  logger.info('🔌 Connecting via database connection URL string');
+  const isPostgres = dbUrl.startsWith('postgres');
+  logger.info(`🔌 Connecting via database connection URL string (${isPostgres ? 'PostgreSQL' : 'MySQL'})`);
   sequelize = new Sequelize(dbUrl, {
-    dialect: 'mysql',
+    dialect: isPostgres ? 'postgres' : 'mysql',
+    dialectOptions: isPostgres ? {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    } : undefined,
     logging: process.env.NODE_ENV === 'development'
       ? (msg) => logger.debug(msg)
       : false,
@@ -26,7 +33,7 @@ if (dbUrl) {
       freezeTableName: false,
       timestamps: true,
     },
-    timezone: '+00:00',
+    timezone: isPostgres ? undefined : '+00:00', // Postgres handles timezone differently
   });
 } else {
   // Extract individual fields, mapping Railway individual parameters if available
@@ -64,7 +71,7 @@ if (dbUrl) {
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    logger.info('✅  MySQL connected via Sequelize');
+    logger.info(`✅  Database connected via Sequelize`);
 
     if (process.env.NODE_ENV === 'development') {
       // Sync without altering in production — use migrations instead
@@ -74,7 +81,7 @@ const connectDB = async () => {
     }
   } catch (error) {
     logger.error(`❌  Database connection failed: ${error.message}`);
-    logger.warn('⚠️ Server will continue running to allow Railway health checks, but database queries will fail until MySQL is fully online.');
+    logger.warn('⚠️ Server will continue running, but database queries will fail until DB is fully online.');
   }
 };
 
