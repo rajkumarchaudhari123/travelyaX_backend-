@@ -323,11 +323,12 @@ module.exports = {
     ]);
 
     // ─── 6. Sample Transactions ────────────────────────────────────────────────
+    const isPostgres = queryInterface.sequelize.options.dialect === 'postgres';
     const wallets = await queryInterface.sequelize.query(
-      `SELECT id, userId FROM wallets`,
+      isPostgres ? 'SELECT id, "userId" FROM wallets' : 'SELECT id, userId FROM wallets',
       { type: queryInterface.sequelize.QueryTypes.SELECT }
     );
-    const walletByUser = Object.fromEntries(wallets.map((w) => [w.userId, w.id]));
+    const walletByUser = Object.fromEntries(wallets.map((w) => [w.userId || w.userid, w.id]));
 
     const aliceId = userMap['alice@travelya.com'];
     const carlosId = userMap['carlos@travelya.com'];
