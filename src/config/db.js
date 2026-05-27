@@ -11,7 +11,8 @@ let sequelize;
 if (dbUrl) {
   const isPostgres = dbUrl.startsWith('postgres');
   logger.info(`🔌 Connecting via database connection URL string (${isPostgres ? 'PostgreSQL' : 'MySQL'})`);
-  sequelize = new Sequelize(dbUrl, {
+  
+  const options = {
     dialect: isPostgres ? 'postgres' : 'mysql',
     dialectOptions: isPostgres ? {
       ssl: {
@@ -33,8 +34,13 @@ if (dbUrl) {
       freezeTableName: false,
       timestamps: true,
     },
-    timezone: isPostgres ? undefined : '+00:00', // Postgres handles timezone differently
-  });
+  };
+
+  if (!isPostgres) {
+    options.timezone = '+00:00';
+  }
+
+  sequelize = new Sequelize(dbUrl, options);
 } else {
   // Extract individual fields, mapping Railway individual parameters if available
   const dbName = process.env.DB_NAME || process.env.MYSQLDATABASE;
