@@ -25,8 +25,8 @@ module.exports = {
       status:           { type: Sequelize.ENUM('pending','accepted','in_progress','completed','cancelled'), allowNull: false, defaultValue: 'pending' },
       cancellationReason: { type: Sequelize.TEXT, allowNull: true, defaultValue: null },
       cancelledBy:      { type: Sequelize.ENUM('rider','driver','admin','system'), allowNull: true, defaultValue: null },
-      riderRating:      { type: Sequelize.TINYINT.UNSIGNED, allowNull: true, defaultValue: null },
-      driverRating:     { type: Sequelize.TINYINT.UNSIGNED, allowNull: true, defaultValue: null },
+      riderRating:      { type: Sequelize.SMALLINT.UNSIGNED, allowNull: true, defaultValue: null },
+      driverRating:     { type: Sequelize.SMALLINT.UNSIGNED, allowNull: true, defaultValue: null },
       riderNote:        { type: Sequelize.TEXT, allowNull: true, defaultValue: null },
       driverNote:       { type: Sequelize.TEXT, allowNull: true, defaultValue: null },
       acceptedAt:       { type: Sequelize.DATE, allowNull: true, defaultValue: null },
@@ -34,7 +34,7 @@ module.exports = {
       completedAt:      { type: Sequelize.DATE, allowNull: true, defaultValue: null },
       cancelledAt:      { type: Sequelize.DATE, allowNull: true, defaultValue: null },
       createdAt:        { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
-      updatedAt:        { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') },
+      updatedAt:        { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
     });
     await queryInterface.addIndex('rides', ['riderId']);
     await queryInterface.addIndex('rides', ['driverId']);

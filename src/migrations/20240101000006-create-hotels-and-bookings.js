@@ -29,7 +29,7 @@ module.exports = {
       isActive:           { type: Sequelize.BOOLEAN,     allowNull: false, defaultValue: true },
       cancellationPolicy: { type: Sequelize.TEXT,        allowNull: true,  defaultValue: null },
       createdAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
-      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') },
+      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
     });
     await queryInterface.addIndex('hotels', ['city']);
     await queryInterface.addIndex('hotels', ['category']);
@@ -48,14 +48,14 @@ module.exports = {
       },
       checkIn:            { type: Sequelize.DATEONLY,    allowNull: false },
       checkOut:           { type: Sequelize.DATEONLY,    allowNull: false },
-      guests:             { type: Sequelize.TINYINT.UNSIGNED, allowNull: false, defaultValue: 1 },
-      rooms:              { type: Sequelize.TINYINT.UNSIGNED, allowNull: false, defaultValue: 1 },
+      guests:             { type: Sequelize.SMALLINT.UNSIGNED, allowNull: false, defaultValue: 1 },
+      rooms:              { type: Sequelize.SMALLINT.UNSIGNED, allowNull: false, defaultValue: 1 },
       roomType:           { type: Sequelize.STRING(50),  allowNull: false, defaultValue: 'standard' },
       guestName:          { type: Sequelize.STRING(100), allowNull: false },
       guestPhone:         { type: Sequelize.STRING(20),  allowNull: false },
       guestEmail:         { type: Sequelize.STRING(150), allowNull: true,  defaultValue: null },
       pricePerNight:      { type: Sequelize.DECIMAL(10,2), allowNull: false },
-      totalNights:        { type: Sequelize.TINYINT.UNSIGNED, allowNull: false, defaultValue: 1 },
+      totalNights:        { type: Sequelize.SMALLINT.UNSIGNED, allowNull: false, defaultValue: 1 },
       totalAmount:        { type: Sequelize.DECIMAL(12,2), allowNull: false },
       taxAmount:          { type: Sequelize.DECIMAL(10,2), allowNull: false, defaultValue: 0 },
       discountAmount:     { type: Sequelize.DECIMAL(10,2), allowNull: false, defaultValue: 0 },
@@ -68,7 +68,7 @@ module.exports = {
       cancelledAt:        { type: Sequelize.DATE,        allowNull: true,  defaultValue: null },
       refundAmount:       { type: Sequelize.DECIMAL(10,2), allowNull: true, defaultValue: null },
       createdAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
-      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') },
+      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
     });
     await queryInterface.addIndex('hotel_bookings', ['userId']);
     await queryInterface.addIndex('hotel_bookings', ['hotelId']);

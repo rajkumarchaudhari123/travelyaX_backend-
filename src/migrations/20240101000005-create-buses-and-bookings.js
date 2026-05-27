@@ -23,7 +23,7 @@ module.exports = {
       isActive:       { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: true },
       travelDate:     { type: Sequelize.DATEONLY,    allowNull: false },
       createdAt:      { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
-      updatedAt:      { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') },
+      updatedAt:      { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
     });
     await queryInterface.addIndex('buses', ['source', 'destination']);
     await queryInterface.addIndex('buses', ['travelDate']);
@@ -54,7 +54,7 @@ module.exports = {
       cancellationReason: { type: Sequelize.TEXT,        allowNull: true,  defaultValue: null },
       cancelledAt:        { type: Sequelize.DATE,        allowNull: true,  defaultValue: null },
       createdAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
-      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') },
+      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
     });
     await queryInterface.addIndex('bus_bookings', ['userId']);
     await queryInterface.addIndex('bus_bookings', ['busId']);

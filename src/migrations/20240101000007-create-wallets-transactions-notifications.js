@@ -16,7 +16,7 @@ module.exports = {
       isActive:           { type: Sequelize.BOOLEAN,       allowNull: false, defaultValue: true },
       lastTransactionAt:  { type: Sequelize.DATE,          allowNull: true,  defaultValue: null },
       createdAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
-      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') },
+      updatedAt:          { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
     });
     await queryInterface.addIndex('wallets', ['userId'], { unique: true });
 
