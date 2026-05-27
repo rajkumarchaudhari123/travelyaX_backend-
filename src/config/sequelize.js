@@ -4,9 +4,20 @@ require('dotenv').config();
 
 const dbUrl = process.env.MYSQL_URL || process.env.DATABASE_URL;
 
+let isPostgres = false;
+if (dbUrl) {
+  isPostgres = dbUrl.startsWith('postgres');
+}
+
 const config = dbUrl ? {
   use_env_variable: process.env.MYSQL_URL ? 'MYSQL_URL' : 'DATABASE_URL',
-  dialect: 'mysql',
+  dialect: isPostgres ? 'postgres' : 'mysql',
+  dialectOptions: isPostgres ? {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  } : undefined,
   logging: false,
 } : {
   username: process.env.DB_USER || 'root',
@@ -31,7 +42,13 @@ module.exports = {
   },
   production: dbUrl ? {
     use_env_variable: process.env.MYSQL_URL ? 'MYSQL_URL' : 'DATABASE_URL',
-    dialect: 'mysql',
+    dialect: isPostgres ? 'postgres' : 'mysql',
+    dialectOptions: isPostgres ? {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    } : undefined,
     logging: false,
     pool: {
       max: 20,
