@@ -365,6 +365,12 @@ class RideService {
 
     const ride = await Ride.findOne({ where: whereClause });
     if (!ride) throw AppError.notFound('Ride');
+    
+    // If already cancelled, just return success idempotently
+    if (ride.status === 'cancelled') {
+      return this.getRideById(ride.id);
+    }
+    
     if (!ride.isCancellable()) {
       throw AppError.conflict(`Ride in '${ride.status}' status cannot be cancelled`);
     }
@@ -387,6 +393,9 @@ class RideService {
         referenceId:   ride.id,
         referenceType: 'ride',
       });
+      
+      const { notifyUser } = require('./socket.service');
+      notifyUser(notifyUserId, 'ride_cancelled', { rideId: ride.id, reason, cancelledBy: userRole });
     }
 
     return this.getRideById(ride.id);

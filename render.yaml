@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: travelya-backend
+    env: node
+    plan: free
+    region: singapore
+    buildCommand: npm install
+    startCommand: npm run db:migrate && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      # Provide your MySQL connection URL below, Render only provides PostgreSQL natively
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: "*"

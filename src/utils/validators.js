@@ -73,7 +73,7 @@ const cancelRideSchema = Joi.object({
 const rateRideSchema = Joi.object({
   rideId: fields.id.required(),
   rating: Joi.number().integer().min(1).max(5).required(),
-  note:   Joi.string().trim().max(500).optional(),
+  note:   Joi.string().trim().allow('').max(500).optional(),
 });
 
 const verifyOtpSchema = Joi.object({
